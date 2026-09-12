@@ -2,64 +2,6 @@ import Profile from "../models/Profile.js";
 import User from "../models/User.js";
 
 
-// CREATE PROFILE
-export const createProfile = async (req, res) => {
-    try {
-        const { userId } = req.params;
-
-        const {
-            age,
-            phone,
-            bio,
-            address
-        } = req.body;
-
-
-        // Check if user exists
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found"
-            });
-        }
-
-
-        // Check if profile already exists
-        const existingProfile = await Profile.findOne({
-            user: userId
-        });
-
-        if (existingProfile) {
-            return res.status(400).json({
-                message: "Profile already exists"
-            });
-        }
-
-
-        // Create profile
-        const profile = await Profile.create({
-            user: userId,
-            age,
-            phone,
-            bio,
-            address
-        });
-
-
-        res.status(201).json({
-            message: "Profile created successfully",
-            profile
-        });
-
-    } catch (error) {
-        res.status(500).json({
-            message: "Server error",
-            error: error.message
-        });
-    }
-};
-
 
 
 // GET PROFILE
